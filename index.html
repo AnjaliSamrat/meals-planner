@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriGenius</title>
+    <link rel="icon" type="image/x-icon" href="">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        input, select, textarea, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #assessment-result, #meal-plan-result {
+            margin-top: 20px;
+            text-align: left;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NutriGenius</h1>
+        
+        <!-- Dietary Assessment Form -->
+        <form id="dietary-assessment-form">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+            
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer_not_to_say">Prefer not to say</option>
+            </select>
+            
+            <label for="activity-level">Activity Level:</label>
+            <select id="activity-level" name="activity-level" required>
+                <option value="sedentary">Sedentary</option>
+                <option value="lightly_active">Lightly Active</option>
+                <option value="moderately_active">Moderately Active</option>
+                <option value="very_active">Very Active</option>
+            </select>
+            
+            <label for="dietary-habits">Describe your usual dietary habits:</label>
+            <textarea id="dietary-habits" name="dietary-habits" rows="4" required></textarea>
+            
+            <button type="button" onclick="assessDiet()">Submit Dietary Assessment</button>
+        </form>
+        <div id="assessment-result"></div>
+
+        <!-- Meal Plan Generator -->
+        <form id="meal-plan-form">
+            <label for="goal">Health Goal:</label>
+            <select id="goal" name="goal">
+                <option value="weight_loss">Weight Loss</option>
+                <option value="muscle_gain">Muscle Gain</option>
+                <option value="maintain">Maintain Weight</option>
+            </select>
+            
+            <label for="diet">Dietary Preference:</label>
+            <select id="diet" name="diet">
+                <option value="vegan">Vegan</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="gluten_free">Gluten-Free</option>
+                <option value="low_carb">Low-Carb</option>
+                <option value="regular">Regular</option>
+            </select>
+            
+            <button type="button" onclick="generateMealPlan()">Generate Meal Plan</button>
+        </form>
+        <div id="meal-plan-result"></div>
+    </div>
+
+    <script>
+        function assessDiet() {
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const activityLevel = document.getElementById('activity-level').value;
+            const dietaryHabits = document.getElementById('dietary-habits').value;
+
+            let assessment = `
+                <h2>Dietary Assessment</h2>
+                <p><strong>Age:</strong> ${age}</p>
+                <p><strong>Gender:</strong> ${gender}</p>
+                <p><strong>Activity Level:</strong> ${activityLevel}</p>
+                <p><strong>Dietary Habits:</strong> ${dietaryHabits}</p>
+            `;
+
+            if (activityLevel === 'sedentary') {
+                assessment += `
+                    <p>You have a sedentary lifestyle. Consider incorporating more physical activities into your routine for better health.</p>
+                `;
+            } else if (activityLevel === 'lightly_active') {
+                assessment += `
+                    <p>You have a lightly active lifestyle. This is good, but try to include more regular exercise to improve your fitness level.</p>
+                `;
+            } else if (activityLevel === 'moderately_active') {
+                assessment += `
+                    <p>You have a moderately active lifestyle. Keep up the good work! Regular exercise is beneficial for maintaining a healthy weight and overall well-being.</p>
+                `;
+            } else if (activityLevel === 'very_active') {
+                assessment += `
+                    <p>You have a very active lifestyle. Great job! Make sure to maintain a balanced diet to support your high activity levels.</p>
+                `;
+            }
+
+            if (dietaryHabits.toLowerCase().includes('fast food')) {
+                assessment += `
+                    <p>It looks like you consume fast food regularly. Try to reduce the intake of fast food and incorporate more whole foods like fruits, vegetables, and lean proteins.</p>
+                `;
+            }
+
+            if (dietaryHabits.toLowerCase().includes('vegetables')) {
+                assessment += `
+                    <p>Good job including vegetables in your diet! Vegetables are essential for providing vitamins, minerals, and fiber.</p>
+                `;
+            }
+
+            document.getElementById('assessment-result').innerHTML = assessment;
+        }
+
+        function generateMealPlan() {
+    const goal = document.getElementById('goal').value;
+    const diet = document.getElementById('diet').value;
+
+    let mealPlan = '';
+
+    if (goal === 'weight_loss') {
+        if (diet === 'vegan') {
+            mealPlan = `
+                <h2>Weight Loss - Vegan Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Smoothie with spinach, banana, and almond milk</li>
+                    <li>Lunch: Quinoa salad with chickpeas, cucumber, and avocado</li>
+                    <li>Dinner: Stir-fried tofu with vegetables and brown rice</li>
+                    <li>Snacks: Carrot sticks with hummus, apple slices with almond butter</li>
+                </ul>
+            `;
+        } else if (diet === 'vegetarian') {
+            mealPlan = `
+                <h2>Weight Loss - Vegetarian Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Greek yogurt with berries and granola</li>
+                    <li>Lunch: Lentil soup with whole grain bread</li>
+                    <li>Dinner: Paneer curry with quinoa</li>
+                    <li>Snacks: Mixed nuts, celery sticks with peanut butter</li>
+                </ul>
+            `;
+        } else if (diet === 'gluten_free') {
+            mealPlan = `
+                <h2>Weight Loss - Gluten-Free Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Scrambled eggs with avocado</li>
+                    <li>Lunch: Grilled chicken salad with mixed greens</li>
+                    <li>Dinner: Baked salmon with sweet potatoes</li>
+                    <li>Snacks: Rice cakes with almond butter, fresh fruit</li>
+                </ul>
+            `;
+        } else if (diet === 'low_carb') {
+            mealPlan = `
+                <h2>Weight Loss - Low-Carb Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Omelette with spinach and mushrooms</li>
+                    <li>Lunch: Chicken Caesar salad without croutons</li>
+                    <li>Dinner: Grilled steak with steamed broccoli</li>
+                    <li>Snacks: Cheese sticks, cucumber slices with guacamole</li>
+                </ul>
+            `;
+        } else if (diet === 'regular') {
+            mealPlan = `
+                <h2>Weight Loss - Regular Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Whole grain cereal with milk and fruit</li>
+                    <li>Lunch: Turkey sandwich with whole wheat bread and vegetables</li>
+                    <li>Dinner: Pasta with marinara sauce and side salad</li>
+                    <li>Snacks: Yogurt with mixed berries, popcorn</li>
+                </ul>
+            `;
+        }
+    } else if (goal === 'muscle_gain') {
+        if (diet === 'vegan') {
+            mealPlan = `
+                <h2>Muscle Gain - Vegan Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Protein smoothie with plant-based protein powder, banana, and almond milk</li>
+                    <li>Lunch: Chickpea and quinoa salad with mixed greens</li>
+                    <li>Dinner: Tofu stir-fry with brown rice</li>
+                    <li>Snacks: Almonds, rice cakes with nut butter</li>
+                </ul>
+            `;
+        } else if (diet === 'vegetarian') {
+            mealPlan = `
+                <h2>Muscle Gain - Vegetarian Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Greek yogurt with granola and mixed berries</li>
+                    <li>Lunch: Lentil and black bean burrito with whole wheat tortilla</li>
+                    <li>Dinner: Grilled halloumi with quinoa and roasted vegetables</li>
+                    <li>Snacks: Cottage cheese with fruit, protein bars</li>
+                </ul>
+            `;
+        } else if (diet === 'gluten_free') {
+            mealPlan = `
+                <h2>Muscle Gain - Gluten-Free Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Scrambled eggs with avocado and gluten-free toast</li>
+                    <li>Lunch: Grilled chicken with quinoa and steamed vegetables</li>
+                    <li>Dinner: Baked trout with quinoa pilaf</li>
+                    <li>Snacks: Rice cakes with almond butter, Greek yogurt with honey</li>
+                </ul>
+            `;
+        } else if (diet === 'low_carb') {
+            mealPlan = `
+                <h2>Muscle Gain - Low-Carb Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Cottage cheese with berries and nuts</li>
+                    <li>Lunch: Turkey and cheese lettuce wraps</li>
+                    <li>Dinner: Grilled salmon with asparagus</li>
+                    <li>Snacks: Beef jerky, protein shake</li>
+                </ul>
+            `;
+        } else if (diet === 'regular') {
+            mealPlan = `
+                <h2>Muscle Gain - Regular Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Oatmeal with milk, nuts, and fruit</li>
+                    <li>Lunch: Grilled chicken sandwich with whole wheat bun and vegetables</li>
+                    <li>Dinner: Beef stir-fry with brown rice</li>
+                    <li>Snacks: Greek yogurt with granola, trail mix</li>
+                </ul>
+            `;
+        }
+    } else if (goal === 'maintain') {
+        if (diet === 'vegan') {
+            mealPlan = `
+                <h2>Maintain Weight - Vegan Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Avocado toast with mixed seeds</li>
+                    <li>Lunch: Quinoa and black bean salad</li>
+                    <li>Dinner: Lentil and vegetable stew</li>
+                    <li>Snacks: Hummus with vegetable sticks, fruit</li>
+                </ul>
+            `;
+        } else if (diet === 'vegetarian') {
+            mealPlan = `
+                <h2>Maintain Weight - Vegetarian Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Smoothie bowl with mixed berries and nuts</li>
+                    <li>Lunch: Caprese salad with whole grain bread</li>
+                    <li>Dinner: Stuffed peppers with couscous</li>
+                    <li>Snacks: Greek yogurt with honey, popcorn</li>
+                </ul>
+            `;
+        } else if (diet === 'gluten_free') {
+            mealPlan = `
+                <h2>Maintain Weight - Gluten-Free Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Scrambled eggs with sautéed spinach</li>
+                    <li>Lunch: Grilled shrimp with quinoa tabbouleh</li>
+                    <li>Dinner: Chicken and vegetable stir-fry with rice noodles</li>
+                    <li>Snacks: Rice cakes with almond butter, fresh fruit</li>
+                </ul>
+            `;
+        } else if (diet === 'low_carb') {
+            mealPlan = `
+                <h2>Maintain Weight - Low-Carb Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Greek yogurt with chia seeds and berries</li>
+                    <li>Lunch: Turkey and avocado lettuce wraps</li>
+                    <li>Dinner: Grilled salmon with steamed vegetables</li>
+                    <li>Snacks: Cheese with olives, protein bar</li>
+                </ul>
+            `;
+        } else if (diet === 'regular') {
+            mealPlan = `
+                <h2>Maintain Weight - Regular Meal Plan</h2>
+                <ul>
+                    <li>Breakfast: Whole grain pancakes with maple syrup</li>
+                    <li>Lunch: Tuna salad sandwich with whole wheat bread</li>
+                    <li>Dinner: Pasta primavera with mixed vegetables</li>
+                    <li>Snacks: Mixed nuts, fruit smoothie</li>
+                </ul>
+            `;
+        }
+    }
+
+    // Display the generated meal plan
+    document.getElementById('meal-plan-result').innerHTML = mealPlan;
+}
+</script>
+</body>
+</html>
